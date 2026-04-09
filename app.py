@@ -1,16 +1,18 @@
 import streamlit as st
 import joblib
-import requests
+import gdown
+import os
 
 @st.cache_resource
 def load_model():
     url = "https://drive.google.com/uc?id=1HCp-6AseXqWXganqE7hFhNTXe2r2oQs2"
+    output = "model.pkl"
     
-    response = requests.get(url)
-    with open("model.pkl", "wb") as f:
-        f.write(response.content)
+    # Download only if not already present
+    if not os.path.exists(output):
+        gdown.download(url, output, quiet=False)
     
-    model = joblib.load("model.pkl")
+    model = joblib.load(output)
     return model
 
 model = load_model()
