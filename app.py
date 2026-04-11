@@ -29,7 +29,7 @@ model = load_model()
 
 st.success("✅ Model Ready | Protecting Mumbai's Health")
 
-# ====================== HEALTHY AQI INFORMATION ======================
+# Healthy AQI Information
 st.markdown("### 🛡️ Healthy AQI Range for Normal Humans")
 col1, col2, col3, col4 = st.columns(4)
 
@@ -40,11 +40,11 @@ with col2:
 with col3:
     st.metric("**Poor**", "101 - 200", "Caution advised")
 with col4:
-    st.metric("**Very Poor**", "201+", "Avoid outdoor activities")
+    st.metric("**Very Poor**", "201+", "High Risk")
 
 st.info("💡 **Tip**: For a healthy person, try to keep AQI **below 100**. Above 150, children, elderly, and people with asthma should be extra careful.")
 
-# ====================== INPUT SECTION ======================
+# Input Section
 st.header("📍 Current Conditions in Mumbai")
 
 col_input1, col_input2 = st.columns(2)
@@ -62,7 +62,6 @@ with col_input2:
 if st.button("🔮 Predict Future AQI & Health Impact", type="primary", use_container_width=True):
     with st.spinner("Analyzing pollution, season & weather for your health..."):
         
-        # Stronger season effect
         season_factor = {'Winter': 1.20, 'Summer': 0.90, 'Monsoon': 0.80, 'Post-Monsoon': 1.10}[season]
         
         input_data = pd.DataFrame({
@@ -83,7 +82,6 @@ if st.button("🔮 Predict Future AQI & Health Impact", type="primary", use_cont
             pred_24 = current_aqi * season_factor + np.random.uniform(-20, 25)
             pred_48 = current_aqi * season_factor * 1.08 + np.random.uniform(-30, 35)
 
-        # Risk Level Function
         def get_risk_info(aqi):
             if aqi <= 50: return "Good", "🟢", "Safe"
             elif aqi <= 100: return "Moderate", "🟡", "Generally safe"
@@ -127,9 +125,26 @@ if st.button("🔮 Predict Future AQI & Health Impact", type="primary", use_cont
             if risk_24 in ["Poor", "Very Poor", "Severe"]:
                 st.error("Limit outdoor activities • Wear N95 mask • Keep windows closed • Use air purifier if possible")
             else:
-                st.success("Air quality is manageable. You can go outside normally.")
+                st.success("You can go outside normally. Stay hydrated!")
 
         with col_b:
             st.subheader(f"Next 48 Hours ({risk_48})")
             if risk_48 in ["Poor", "Very Poor", "Severe"]:
-                st.error("Avoid going out if possible • Monitor breathing • Stay hydrated •
+                st.error("Avoid going out if possible • Monitor breathing • Stay hydrated • Avoid heavy exercise")
+            else:
+                st.success("Air quality expected to remain acceptable.")
+
+# Sidebar
+with st.sidebar:
+    st.image("https://img.icons8.com/fluency/96/000000/lungs.png")
+    st.header("Health First")
+    st.info("""
+    High AQI can affect:
+    - Lungs & Breathing
+    - Heart Health
+    - Children & Elderly
+    - People with Asthma
+    """)
+    st.caption("Built for Mumbai • Capstone Project")
+
+st.caption("Note: This app uses a light Random Forest model (7MB) for fast predictions.")
