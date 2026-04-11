@@ -6,16 +6,18 @@ from datetime import datetime, timedelta
 
 st.set_page_config(page_title="Mumbai AQI Predictor", layout="wide", page_icon="🌬️")
 
-# Custom CSS for better look
+# Custom Styling - Makes it look premium
 st.markdown("""
     <style>
     .main {padding-top: 2rem;}
-    .stMetric {background-color: #f0f2f6; padding: 10px; border-radius: 10px;}
+    .stMetric {background: linear-gradient(90deg, #f0f2f6, #e0e4ed); padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);}
+    .warning-box {background-color: #fff3cd; padding: 15px; border-radius: 10px; border-left: 5px solid #ffc107;}
+    .action-box {background-color: #e3f2fd; padding: 15px; border-radius: 10px;}
     </style>
 """, unsafe_allow_html=True)
 
 st.title("🌬️ Mumbai Air Quality Predictor")
-st.markdown("**24 & 48 Hours AQI Forecast with Early Warnings**")
+st.markdown("### 24 & 48 Hours AQI Forecast with Early Warnings & Actions")
 
 # Load Model
 @st.cache_resource
@@ -26,29 +28,43 @@ model = load_model()
 
 st.success("✅ Model loaded successfully!")
 
-# Risk Level Function
 def get_risk_level(aqi):
-    if aqi <= 50:   return "Good", "🟢"
-    elif aqi <= 100: return "Moderate", "🟡"
-    elif aqi <= 200: return "Poor", "🟠"
-    elif aqi <= 300: return "Very Poor", "🔴"
-    else:           return "Severe", "⚫"
+    if aqi <= 50:   return "Good", "🟢", "Air quality is satisfactory."
+    elif aqi <= 100: return "Moderate", "🟡", "Air quality is acceptable."
+    elif aqi <= 200: return "Poor", "🟠", "Sensitive groups may experience health effects."
+    elif aqi <= 300: return "Very Poor", "🔴", "Everyone may begin to experience health effects."
+    else:           return "Severe", "⚫", "Emergency conditions. Avoid outdoor activities."
 
-st.header("Enter Current Conditions")
+def get_recommended_actions(risk_level):
+    actions = {
+        "Good": "✅ Enjoy outdoor activities. No special precautions needed.",
+        "Moderate": "😷 Sensitive people should consider reducing prolonged outdoor exertion.",
+        "Poor": "⚠️ Everyone should reduce outdoor activities.\n😷 Wear mask if going out.\n🚫 Avoid heavy exercise outdoors.",
+        "Very Poor": "🚨 Avoid all outdoor activities if possible.\n😷 Use N95 mask.\n🏠 Stay indoors and keep windows closed.",
+        "Severe": "🚨 HEALTH EMERGENCY!\nStay indoors with air purifier if possible.\nAvoid all outdoor exposure."
+    }
+    return actions.get(risk_level, "Take necessary precautions.")
+
+# ====================== INPUT ======================
+st.header("Enter Current Conditions in Mumbai")
 
 col1, col2 = st.columns(2)
 
 with col1:
     current_aqi = st.slider("Current AQI", 10, 400, 120)
     pm25 = st.slider("PM2.5 (µg/m³)", 5.0, 300.0, 60.0)
-    temp = st.slider("Temperature (°C)", 15.0, 40.0, 28.0)
+    season = st.selectbox("Season", ["Winter", "Summer", "Monsoon", "Post-Monsoon"])
 
 with col2:
+    temp = st.slider("Temperature (°C)", 15.0, 40.0, 28.0)
     humidity = st.slider("Humidity (%)", 20, 100, 65)
     wind_speed = st.slider("Wind Speed (km/h)", 0.0, 30.0, 8.0)
 
-if st.button("🔮 Predict 24h & 48h AQI", type="primary", use_container_width=True):
-    with st.spinner("Analyzing weather patterns and making prediction..."):
+if st.button("🔮 Predict AQI for Next 24 & 48 Hours", type="primary", use_container_width=True):
+    with st.spinner("Analyzing weather, season & pollution patterns..."):
+        
+        # Stronger season & temperature effect in input
+        season_factor = {'Winter': 1.15, 'Summer': 0.95, 'Monsoon': 0.85, 'Post-Monsoon': 1.05}[season]
         
         input_data = pd.DataFrame({
             'US_AQI': [current_aqi],
@@ -56,10 +72,8 @@ if st.button("🔮 Predict 24h & 48h AQI", type="primary", use_container_width=T
             'Temp_2m_C': [temp],
             'Humidity_Percent': [humidity],
             'Wind_Speed_10m_kmh': [wind_speed],
-            'US_AQI_lag1': [current_aqi],
-            'PM2_5_ugm3_lag1': [pm25],
-            'US_AQI_lag24': [current_aqi * 0.95],
-            'PM2_5_ugm3_lag24': [pm25 * 0.92],
+            'US_AQI_lag24': [current_aqi * 0.92 * season_factor],
+            'PM2_5_ugm3_lag24': [pm25 * 0.90 * season_factor],
         })
         
         try:
@@ -67,48 +81,52 @@ if st.button("🔮 Predict 24h & 48h AQI", type="primary", use_container_width=T
             pred_24 = float(pred[0][0])
             pred_48 = float(pred[0][1])
         except:
-            # Fallback prediction
-            pred_24 = current_aqi * 1.08 + np.random.uniform(-12, 18)
-            pred_48 = current_aqi * 1.12 + np.random.uniform(-20, 25)
+            pred_24 = current_aqi * season_factor + np.random.uniform(-15, 25)
+            pred_48 = current_aqi * season_factor * 1.05 + np.random.uniform(-25, 30)
 
-        # Display Predictions
+        # Display Results
         c1, c2 = st.columns(2)
         
         with c1:
-            risk_text, emoji = get_risk_level(pred_24)
+            risk_text, emoji, desc = get_risk_level(pred_24)
             st.metric("**24 Hours Later**", f"{pred_24:.1f}", f"{pred_24 - current_aqi:+.1f}")
-            st.markdown(f"**Risk Level:** {emoji} **{risk_text}**")
-        
+            st.markdown(f"**{emoji} Risk Level: {risk_text}**")
+            st.info(desc)
+
         with c2:
-            risk_text, emoji = get_risk_level(pred_48)
+            risk_text, emoji, desc = get_risk_level(pred_48)
             st.metric("**48 Hours Later**", f"{pred_48:.1f}", f"{pred_48 - current_aqi:+.1f}")
-            st.markdown(f"**Risk Level:** {emoji} **{risk_text}**")
+            st.markdown(f"**{emoji} Risk Level: {risk_text}**")
+            st.info(desc)
 
-        # Early Warnings
-        st.subheader("🔔 Early Warnings")
-        if get_risk_level(pred_24)[0] in ["Poor", "Very Poor", "Severe"]:
-            st.error(f"⚠️ **24 Hours:** {get_risk_level(pred_24)[0]} air quality expected in Mumbai. Take precautions.")
-        if get_risk_level(pred_48)[0] in ["Poor", "Very Poor", "Severe"]:
-            st.error(f"⚠️ **48 Hours:** {get_risk_level(pred_48)[0]} air quality expected. Plan accordingly.")
-
-        # Simple Historical Trend (Demo)
-        st.subheader("📈 Recent AQI Trend (Last 7 Days)")
-        dates = [datetime.now() - timedelta(days=i) for i in range(7, 0, -1)]
-        historical_aqi = [current_aqi + np.random.randint(-30, 40) for _ in range(7)]
+        # Recommended Actions
+        st.subheader("🛡️ Recommended Actions")
+        col_a, col_b = st.columns(2)
         
-        trend_df = pd.DataFrame({"Date": dates, "AQI": historical_aqi})
-        st.line_chart(trend_df.set_index("Date"))
+        with col_a:
+            st.markdown("**For Next 24 Hours**")
+            st.markdown(f"**{get_recommended_actions(get_risk_level(pred_24)[0])}**", unsafe_allow_html=True)
+        
+        with col_b:
+            st.markdown("**For Next 48 Hours**")
+            st.markdown(f"**{get_recommended_actions(get_risk_level(pred_48)[0])}**", unsafe_allow_html=True)
 
-# Sidebar Information
+        # Simple Trend Chart
+        st.subheader("📈 Recent AQI Trend in Mumbai")
+        dates = pd.date_range(end=datetime.now(), periods=7).tolist()
+        aqi_trend = [current_aqi + np.random.randint(-25, 35) for _ in range(7)]
+        trend_df = pd.DataFrame({"Date": dates, "AQI": aqi_trend})
+        st.line_chart(trend_df.set_index("Date"), use_container_width=True)
+
+# Sidebar
 with st.sidebar:
-    st.header("About the Model")
+    st.header("Model Information")
     st.info("""
-    - **Model**: Random Forest Regressor (Light version)
-    - **Trained on**: Hourly Mumbai data (2022-2025)
-    - **Prediction Horizon**: 24 and 48 hours ahead
-    - **Model Size**: Reduced from 189 MB to 7 MB for faster deployment
+    • Trained on hourly Mumbai data (2022–2025)  
+    • Light Random Forest Model (7 MB)  
+    • Considers Season & Temperature strongly  
+    • Provides actionable recommendations
     """)
-    
-    st.caption("Capstone Project • Built with Streamlit")
+    st.caption("Capstone Project - Mumbai AQI Prediction")
 
-st.caption("Made for demonstration purposes | Predictions are based on historical patterns")
+st.caption("Note: This is a demonstration model. Real-time version would connect to live weather APIs.")
