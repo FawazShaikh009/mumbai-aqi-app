@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 
 st.set_page_config(page_title="Mumbai AQI Guardian", layout="wide", page_icon="🌬️")
 
+# Styling
 st.markdown("""
     <style>
     .main {padding-top: 2rem;}
@@ -17,8 +18,13 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Top Creative Title Box
+# Top Title
 st.markdown('<div class="big-title">🌬️ Mumbai AQI Guardian</div>', unsafe_allow_html=True)
+
+# Show Current Date & Time
+current_time = datetime.now()
+st.markdown(f"**📅 Prediction made on:** {current_time.strftime('%d %B %Y, %I:%M %p')}")
+
 st.markdown("**Protecting Your Health • 24 & 48 Hours AQI Forecast**")
 
 # Load Model
@@ -38,12 +44,13 @@ with col2: st.metric("**Moderate**", "51–100", "OK")
 with col3: st.metric("**Poor**", "101–200", "Caution")
 with col4: st.metric("**Very Poor**", "201+", "Avoid Outdoor")
 
-st.info("💡 **Best for health**: Keep AQI under **100**. Above 150, take extra care (especially children & elderly).")
+st.info("💡 **Best for health**: Keep AQI under **100**. Above 150, take extra care.")
 
-# Input
+# Input Section
 st.header("📍 Current Conditions in Mumbai")
 
 col1, col2 = st.columns(2)
+
 with col1:
     current_aqi = st.slider("Current AQI", 10, 400, 120)
     pm25 = st.slider("PM2.5 (µg/m³)", 5.0, 300.0, 60.0)
@@ -56,6 +63,7 @@ with col2:
 
 if st.button("🔮 Predict 24h & 48h AQI & Health Risk", type="primary", use_container_width=True):
     with st.spinner("Analyzing for your health..."):
+        
         season_factor = {'Winter': 1.20, 'Summer': 0.90, 'Monsoon': 0.80, 'Post-Monsoon': 1.10}[season]
         
         input_data = pd.DataFrame({
@@ -106,13 +114,13 @@ if st.button("🔮 Predict 24h & 48h AQI & Health Risk", type="primary", use_con
             </div>
             """, unsafe_allow_html=True)
 
-        # Recommended Actions (Full)
+        # Recommended Actions
         st.markdown("### 🛡️ Recommended Health Actions")
         col_a, col_b = st.columns(2)
         with col_a:
             st.subheader(f"Next 24 Hours ({r24})")
             if r24 in ["Poor", "Very Poor", "Severe"]:
-                st.error("• Limit outdoor activities\n• Wear N95 mask\n• Keep windows closed\n• Use air purifier")
+                st.error("• Limit outdoor activities\n• Wear N95 mask\n• Keep windows closed\n• Use air purifier if possible")
             else:
                 st.success("Safe for normal outdoor activities")
         with col_b:
