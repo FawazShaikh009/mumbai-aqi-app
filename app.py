@@ -18,12 +18,16 @@ st.markdown("""
 
 html, body, [class*="css"] { font-family: 'Sora', sans-serif; }
 
-/* ── Hide Streamlit toolbar / header bar ── */
-header[data-testid="stHeader"] { display: none !important; }
+header { visibility: hidden !important; height: 0 !important; }
+header[data-testid="stHeader"] { display: none !important; height: 0 !important; }
 #MainMenu { display: none !important; }
-footer    { display: none !important; }
+footer { display: none !important; }
 .stDeployButton { display: none !important; }
 div[data-testid="stToolbar"] { display: none !important; }
+div[data-testid="stDecoration"] { display: none !important; }
+div[data-testid="stStatusWidget"] { display: none !important; }
+.viewerBadge_container__1QSob { display: none !important; }
+.styles_viewerBadge__1yB5_ { display: none !important; }
 
 .stApp {
     background: linear-gradient(160deg, #0a0e1a 0%, #0d1b2e 50%, #091220 100%);
@@ -31,7 +35,6 @@ div[data-testid="stToolbar"] { display: none !important; }
 }
 .block-container { padding: 1.5rem 1rem 2rem 1rem !important; max-width: 1100px !important; }
 
-/* Hero */
 .hero-banner {
     background: linear-gradient(135deg, #0d2137 0%, #1a3a5c 50%, #0d2137 100%);
     border: 1px solid rgba(99,179,237,0.2);
@@ -64,7 +67,6 @@ div[data-testid="stToolbar"] { display: none !important; }
     margin-top: 10px; font-family: 'Space Mono', monospace;
 }
 
-/* Scale */
 .scale-wrap {
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
@@ -87,50 +89,36 @@ div[data-testid="stToolbar"] { display: none !important; }
 .chip-orange { background: rgba(221,107,32,0.18); color: #fbd38d; border: 1px solid rgba(221,107,32,0.3); }
 .chip-red    { background: rgba(229,62,62,0.18);  color: #fc8181; border: 1px solid rgba(229,62,62,0.3); }
 
-/* Section label */
 .section-label {
     font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.14em;
     color: rgba(255,255,255,0.35); margin: 28px 0 14px; font-family: 'Space Mono', monospace;
 }
 
-/* Character card */
 .character-wrap {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+    display: flex; align-items: center; gap: 20px;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.09);
-    border-radius: 20px;
-    padding: 20px 24px;
-    margin-bottom: 24px;
+    border-radius: 20px; padding: 20px 24px; margin-bottom: 24px;
 }
 .character-text-block { flex: 1; }
 .character-label {
     font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.14em;
     color: rgba(255,255,255,0.35); font-family: 'Space Mono', monospace; margin-bottom: 6px;
 }
-.character-status {
-    font-size: 1.3rem; font-weight: 700; margin-bottom: 4px;
-}
-.character-tip {
-    font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.6;
-}
+.character-status { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
+.character-tip { font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
 @keyframes float {
     0%   { transform: translateY(0px); }
     50%  { transform: translateY(-8px); }
     100% { transform: translateY(0px); }
 }
-@keyframes breathe {
-    0%   { transform: scaleX(1); }
-    50%  { transform: scaleX(0.96); }
-    100% { transform: scaleX(1); }
-}
-.char-svg { animation: float 3s ease-in-out infinite; }
+.char-svg { animation: float 3s ease-in-out infinite; display: block; margin: 0 auto 8px; }
 
-/* Prediction cards */
 .pred-card {
-    border-radius: 18px; padding: 24px 22px; text-align: center;
+    border-radius: 18px; padding: 20px 18px; text-align: center;
     border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden;
+    min-height: 320px;
 }
 .pred-card-24 { background: linear-gradient(145deg, #1a3a5c 0%, #1e4976 100%); }
 .pred-card-48 { background: linear-gradient(145deg, #3a1a1a 0%, #5c2020 100%); }
@@ -138,7 +126,7 @@ div[data-testid="stToolbar"] { display: none !important; }
     font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em;
     color: rgba(255,255,255,0.5); font-family: 'Space Mono', monospace; margin-bottom: 8px;
 }
-.pred-number { font-size: clamp(3rem, 10vw, 4.5rem); font-weight: 700; letter-spacing: -2px; line-height: 1; margin: 8px 0; }
+.pred-number { font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 700; letter-spacing: -2px; line-height: 1; margin: 6px 0; }
 .pred-status { font-size: 1rem; font-weight: 600; letter-spacing: 0.02em; }
 .pred-badge {
     display: inline-block; margin-top: 10px; padding: 4px 14px; border-radius: 20px;
@@ -146,7 +134,6 @@ div[data-testid="stToolbar"] { display: none !important; }
     background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8);
 }
 
-/* Status dot */
 .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
 .dot-green  { background: #38a169; }
 .dot-yellow { background: #d69e2e; }
@@ -154,14 +141,12 @@ div[data-testid="stToolbar"] { display: none !important; }
 .dot-red    { background: #e53e3e; }
 .dot-purple { background: #805ad5; }
 
-/* Mini cards */
-.mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
 .mini-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); border-radius: 14px; padding: 14px 16px; }
-.mini-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.38); font-family: 'Space Mono', monospace; margin-bottom: 6px; }
-.mini-value { font-size: 1.35rem; font-weight: 700; color: #e2f4ff; }
-.mini-unit  { font-size: 0.65rem; color: rgba(255,255,255,0.38); margin-left: 2px; }
+.mini-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.38); font-family: 'Space Mono', monospace; margin-bottom: 6px; }
+.mini-value { font-size: 1.25rem; font-weight: 700; color: #e2f4ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mini-unit  { font-size: 0.62rem; color: rgba(255,255,255,0.38); margin-left: 2px; }
 
-/* Health advice */
 .advice-card { border-radius: 16px; padding: 18px 20px; margin-bottom: 12px; border-left: 4px solid; }
 .advice-safe    { background: rgba(56,161,105,0.1);  border-color: #38a169; }
 .advice-caution { background: rgba(221,107,32,0.1);  border-color: #dd6b20; }
@@ -169,13 +154,11 @@ div[data-testid="stToolbar"] { display: none !important; }
 .advice-title { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; font-family: 'Space Mono', monospace; }
 .advice-text  { font-size: 0.85rem; color: rgba(255,255,255,0.75); line-height: 1.7; }
 
-/* Alert */
-.alert-banner { border-radius: 14px; padding: 14px 18px; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+.alert-banner { border-radius: 14px; padding: 14px 18px; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
 .alert-danger  { background: rgba(229,62,62,0.15);  border: 1px solid rgba(229,62,62,0.35);  color: #fc8181; }
 .alert-warning { background: rgba(221,107,32,0.15); border: 1px solid rgba(221,107,32,0.35); color: #fbd38d; }
 .alert-safe    { background: rgba(56,161,105,0.12); border: 1px solid rgba(56,161,105,0.3);  color: #68d391; }
 
-/* Streamlit overrides */
 div[data-testid="stSlider"] label,
 div[data-testid="stSelectbox"] label { color: rgba(255,255,255,0.65) !important; font-size: 0.82rem !important; }
 div[data-testid="stMetric"] { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); border-radius: 14px; padding: 14px !important; }
@@ -184,7 +167,7 @@ div[data-testid="stMetric"] [data-testid="stMetricValue"] { color: #e2f4ff !impo
 div[data-testid="stButton"] > button {
     background: linear-gradient(135deg, #2b6cb0, #3182ce) !important;
     color: white !important; border: none !important; border-radius: 12px !important;
-    font-weight: 600 !important; font-size: 1rem !important; width: 100% !important;
+    font-weight: 600 !important; font-size: 1rem !important; width: 100% !important; padding: 0.7rem !important;
 }
 div[data-testid="stButton"] > button:hover { background: linear-gradient(135deg, #3182ce, #4299e1) !important; }
 div[data-testid="stArrowVegaLiteChart"] { background: rgba(255,255,255,0.03) !important; border: 1px solid rgba(255,255,255,0.08) !important; border-radius: 16px !important; padding: 16px !important; }
@@ -194,8 +177,9 @@ section[data-testid="stSidebar"] * { color: rgba(255,255,255,0.8) !important; }
 @media (max-width: 640px) {
     .block-container { padding: 0.75rem 0.75rem 2rem !important; }
     .hero-banner { padding: 20px 18px; }
-    .pred-number { font-size: 3rem !important; }
+    .pred-number { font-size: 2.5rem !important; }
     .character-wrap { flex-direction: column; text-align: center; }
+    .mini-grid { grid-template-columns: repeat(3, 1fr); }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -219,177 +203,213 @@ def get_health_advice(label, window):
     }
     return advice.get(label, "Monitor conditions closely.")
 
-def get_character_svg(aqi):
-    """Returns an SVG character — masked + worried for bad AQI, happy for good AQI."""
+
+def boy_svg(aqi):
+    """BOY character - used for 24h forecast and current status"""
     if aqi <= 50:
-        # Happy person, clean air, green tones
-        return """
-        <svg class="char-svg" width="110" height="140" viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
-          <!-- Body -->
-          <ellipse cx="55" cy="115" rx="28" ry="18" fill="#1a4a2e"/>
-          <!-- Shirt -->
-          <rect x="30" y="88" width="50" height="34" rx="10" fill="#2d6a4f"/>
-          <!-- Neck -->
-          <rect x="48" y="72" width="14" height="18" rx="4" fill="#f4a261"/>
-          <!-- Head -->
-          <circle cx="55" cy="58" r="26" fill="#f4a261"/>
-          <!-- Hair -->
-          <ellipse cx="55" cy="34" rx="26" ry="10" fill="#3d2b1f"/>
-          <!-- Eyes -->
-          <circle cx="46" cy="54" r="4" fill="#1a1a1a"/>
-          <circle cx="64" cy="54" r="4" fill="#1a1a1a"/>
-          <!-- Eye shine -->
-          <circle cx="48" cy="52" r="1.5" fill="white"/>
-          <circle cx="66" cy="52" r="1.5" fill="white"/>
-          <!-- Smile -->
-          <path d="M44 66 Q55 76 66 66" stroke="#c0392b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          <!-- Cheeks -->
-          <circle cx="41" cy="63" r="5" fill="rgba(255,150,100,0.35)"/>
-          <circle cx="69" cy="63" r="5" fill="rgba(255,150,100,0.35)"/>
-          <!-- Arms up (happy) -->
-          <line x1="30" y1="95" x2="10" y2="75" stroke="#2d6a4f" stroke-width="8" stroke-linecap="round"/>
-          <line x1="80" y1="95" x2="100" y2="75" stroke="#2d6a4f" stroke-width="8" stroke-linecap="round"/>
-          <!-- Legs -->
-          <line x1="45" y1="122" x2="38" y2="140" stroke="#1a4a2e" stroke-width="8" stroke-linecap="round"/>
-          <line x1="65" y1="122" x2="72" y2="140" stroke="#1a4a2e" stroke-width="8" stroke-linecap="round"/>
-          <!-- Clean air sparkles -->
-          <circle cx="15" cy="60" r="3" fill="#68d391" opacity="0.8"/>
-          <circle cx="95" cy="50" r="2" fill="#68d391" opacity="0.6"/>
-          <circle cx="20" cy="40" r="2" fill="#9ae6b4" opacity="0.7"/>
-        </svg>
-        """, "#68d391", "Air is clean! Safe to go outside freely."
+        return """<svg class="char-svg" width="100" height="130" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+<rect x="26" y="82" width="48" height="32" rx="9" fill="#2d6a4f"/>
+<ellipse cx="50" cy="110" rx="26" ry="16" fill="#1a4a2e"/>
+<rect x="44" y="68" width="12" height="16" rx="4" fill="#f4a261"/>
+<circle cx="50" cy="54" r="24" fill="#f4a261"/>
+<ellipse cx="50" cy="32" rx="24" ry="9" fill="#3d2b1f"/>
+<circle cx="42" cy="50" r="3.5" fill="#1a1a1a"/>
+<circle cx="58" cy="50" r="3.5" fill="#1a1a1a"/>
+<circle cx="43.5" cy="48.5" r="1.5" fill="white"/>
+<circle cx="59.5" cy="48.5" r="1.5" fill="white"/>
+<path d="M41 62 Q50 71 59 62" stroke="#c0392b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<circle cx="37" cy="59" r="4" fill="rgba(255,150,100,0.3)"/>
+<circle cx="63" cy="59" r="4" fill="rgba(255,150,100,0.3)"/>
+<line x1="26" y1="89" x2="8" y2="70" stroke="#2d6a4f" stroke-width="7" stroke-linecap="round"/>
+<line x1="74" y1="89" x2="92" y2="70" stroke="#2d6a4f" stroke-width="7" stroke-linecap="round"/>
+<line x1="41" y1="116" x2="35" y2="130" stroke="#1a4a2e" stroke-width="7" stroke-linecap="round"/>
+<line x1="59" y1="116" x2="65" y2="130" stroke="#1a4a2e" stroke-width="7" stroke-linecap="round"/>
+<circle cx="12" cy="55" r="3" fill="#68d391" opacity="0.8"/>
+<circle cx="88" cy="46" r="2" fill="#68d391" opacity="0.6"/>
+<circle cx="16" cy="37" r="2" fill="#9ae6b4" opacity="0.7"/>
+</svg>""", "#68d391", "Air is clean! Safe to go outside freely."
 
     elif aqi <= 100:
-        # Slightly cautious person, light mask
-        return """
-        <svg class="char-svg" width="110" height="140" viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
-          <!-- Body -->
-          <ellipse cx="55" cy="115" rx="28" ry="18" fill="#2d4a6e"/>
-          <!-- Shirt -->
-          <rect x="30" y="88" width="50" height="34" rx="10" fill="#3a6186"/>
-          <!-- Neck -->
-          <rect x="48" y="72" width="14" height="18" rx="4" fill="#f4a261"/>
-          <!-- Head -->
-          <circle cx="55" cy="58" r="26" fill="#f4a261"/>
-          <!-- Hair -->
-          <ellipse cx="55" cy="34" rx="26" ry="10" fill="#2c2c54"/>
-          <!-- Eyes (slightly concerned) -->
-          <ellipse cx="46" cy="54" rx="4" ry="3.5" fill="#1a1a1a"/>
-          <ellipse cx="64" cy="54" rx="4" ry="3.5" fill="#1a1a1a"/>
-          <circle cx="48" cy="52" r="1.5" fill="white"/>
-          <circle cx="66" cy="52" r="1.5" fill="white"/>
-          <!-- Light mask -->
-          <rect x="38" y="62" width="34" height="16" rx="8" fill="#a0c4ff" opacity="0.9"/>
-          <line x1="38" y1="70" x2="31" y2="68" stroke="#a0c4ff" stroke-width="2"/>
-          <line x1="72" y1="70" x2="79" y2="68" stroke="#a0c4ff" stroke-width="2"/>
-          <!-- Arms neutral -->
-          <line x1="30" y1="100" x2="12" y2="90" stroke="#3a6186" stroke-width="8" stroke-linecap="round"/>
-          <line x1="80" y1="100" x2="98" y2="90" stroke="#3a6186" stroke-width="8" stroke-linecap="round"/>
-          <!-- Legs -->
-          <line x1="45" y1="122" x2="38" y2="140" stroke="#2d4a6e" stroke-width="8" stroke-linecap="round"/>
-          <line x1="65" y1="122" x2="72" y2="140" stroke="#2d4a6e" stroke-width="8" stroke-linecap="round"/>
-        </svg>
-        """, "#f6e05e", "Moderate air. Consider wearing a light mask outside."
+        return """<svg class="char-svg" width="100" height="130" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+<rect x="26" y="82" width="48" height="32" rx="9" fill="#3a6186"/>
+<ellipse cx="50" cy="110" rx="26" ry="16" fill="#2d4a6e"/>
+<rect x="44" y="68" width="12" height="16" rx="4" fill="#f4a261"/>
+<circle cx="50" cy="54" r="24" fill="#f4a261"/>
+<ellipse cx="50" cy="32" rx="24" ry="9" fill="#2c2c54"/>
+<ellipse cx="42" cy="50" rx="3.5" ry="3" fill="#1a1a1a"/>
+<ellipse cx="58" cy="50" rx="3.5" ry="3" fill="#1a1a1a"/>
+<circle cx="43.5" cy="48.5" r="1.5" fill="white"/>
+<circle cx="59.5" cy="48.5" r="1.5" fill="white"/>
+<rect x="34" y="58" width="32" height="14" rx="7" fill="#a0c4ff" opacity="0.9"/>
+<line x1="34" y1="65" x2="27" y2="63" stroke="#a0c4ff" stroke-width="2"/>
+<line x1="66" y1="65" x2="73" y2="63" stroke="#a0c4ff" stroke-width="2"/>
+<line x1="26" y1="93" x2="10" y2="84" stroke="#3a6186" stroke-width="7" stroke-linecap="round"/>
+<line x1="74" y1="93" x2="90" y2="84" stroke="#3a6186" stroke-width="7" stroke-linecap="round"/>
+<line x1="41" y1="116" x2="35" y2="130" stroke="#2d4a6e" stroke-width="7" stroke-linecap="round"/>
+<line x1="59" y1="116" x2="65" y2="130" stroke="#2d4a6e" stroke-width="7" stroke-linecap="round"/>
+</svg>""", "#f6e05e", "Moderate air. Consider a light mask outside."
 
     elif aqi <= 200:
-        # Masked person, orange tones, worried
-        return """
-        <svg class="char-svg" width="110" height="140" viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
-          <!-- Body -->
-          <ellipse cx="55" cy="115" rx="28" ry="18" fill="#5a2d00"/>
-          <!-- Jacket -->
-          <rect x="30" y="88" width="50" height="34" rx="10" fill="#7b4f1e"/>
-          <!-- Neck -->
-          <rect x="48" y="72" width="14" height="18" rx="4" fill="#e8956d"/>
-          <!-- Head -->
-          <circle cx="55" cy="58" r="26" fill="#e8956d"/>
-          <!-- Hair -->
-          <ellipse cx="55" cy="34" rx="26" ry="10" fill="#1a1a2e"/>
-          <!-- Eyes worried (angled brows) -->
-          <ellipse cx="46" cy="53" rx="4.5" ry="3.5" fill="#1a1a1a"/>
-          <ellipse cx="64" cy="53" rx="4.5" ry="3.5" fill="#1a1a1a"/>
-          <circle cx="48" cy="51" r="1.5" fill="white"/>
-          <circle cx="66" cy="51" r="1.5" fill="white"/>
-          <!-- Worried brows -->
-          <path d="M42 45 Q46 42 50 44" stroke="#3d2b1f" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          <path d="M60 44 Q64 42 68 45" stroke="#3d2b1f" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          <!-- N95 mask -->
-          <path d="M35 62 Q55 80 75 62 L75 75 Q55 88 35 75 Z" fill="#cccccc"/>
-          <path d="M35 62 Q55 56 75 62" fill="#e0e0e0"/>
-          <!-- Mask straps -->
-          <line x1="35" y1="65" x2="27" y2="60" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="75" y1="65" x2="83" y2="60" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"/>
-          <!-- Mask centre seam -->
-          <line x1="55" y1="60" x2="55" y2="83" stroke="#bbb" stroke-width="1" opacity="0.6"/>
-          <!-- Arms defensive -->
-          <line x1="30" y1="98" x2="14" y2="112" stroke="#7b4f1e" stroke-width="8" stroke-linecap="round"/>
-          <line x1="80" y1="98" x2="96" y2="112" stroke="#7b4f1e" stroke-width="8" stroke-linecap="round"/>
-          <!-- Legs -->
-          <line x1="45" y1="122" x2="38" y2="140" stroke="#5a2d00" stroke-width="8" stroke-linecap="round"/>
-          <line x1="65" y1="122" x2="72" y2="140" stroke="#5a2d00" stroke-width="8" stroke-linecap="round"/>
-          <!-- Haze particles -->
-          <circle cx="12" cy="55" r="4" fill="#dd6b20" opacity="0.4"/>
-          <circle cx="95" cy="70" r="3" fill="#dd6b20" opacity="0.3"/>
-          <circle cx="18" cy="80" r="2" fill="#c05621" opacity="0.3"/>
-        </svg>
-        """, "#fbd38d", "Poor air! Wear your N95 mask before stepping out."
+        return """<svg class="char-svg" width="100" height="130" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+<rect x="26" y="82" width="48" height="32" rx="9" fill="#7b4f1e"/>
+<ellipse cx="50" cy="110" rx="26" ry="16" fill="#5a2d00"/>
+<rect x="44" y="68" width="12" height="16" rx="4" fill="#e8956d"/>
+<circle cx="50" cy="54" r="24" fill="#e8956d"/>
+<ellipse cx="50" cy="32" rx="24" ry="9" fill="#1a1a2e"/>
+<ellipse cx="42" cy="49" rx="4" ry="3" fill="#1a1a1a"/>
+<ellipse cx="58" cy="49" rx="4" ry="3" fill="#1a1a1a"/>
+<circle cx="43.5" cy="47.5" r="1.5" fill="white"/>
+<circle cx="59.5" cy="47.5" r="1.5" fill="white"/>
+<path d="M39 41 Q42 38 46 40" stroke="#3d2b1f" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M54 40 Q58 38 61 41" stroke="#3d2b1f" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M32 58 Q50 74 68 58 L68 70 Q50 84 32 70 Z" fill="#cccccc"/>
+<path d="M32 58 Q50 53 68 58" fill="#e0e0e0"/>
+<line x1="32" y1="61" x2="24" y2="56" stroke="#aaa" stroke-width="2" stroke-linecap="round"/>
+<line x1="68" y1="61" x2="76" y2="56" stroke="#aaa" stroke-width="2" stroke-linecap="round"/>
+<line x1="26" y1="92" x2="11" y2="105" stroke="#7b4f1e" stroke-width="7" stroke-linecap="round"/>
+<line x1="74" y1="92" x2="89" y2="105" stroke="#7b4f1e" stroke-width="7" stroke-linecap="round"/>
+<line x1="41" y1="116" x2="35" y2="130" stroke="#5a2d00" stroke-width="7" stroke-linecap="round"/>
+<line x1="59" y1="116" x2="65" y2="130" stroke="#5a2d00" stroke-width="7" stroke-linecap="round"/>
+<circle cx="10" cy="52" r="4" fill="#dd6b20" opacity="0.35"/>
+<circle cx="88" cy="64" r="3" fill="#dd6b20" opacity="0.25"/>
+</svg>""", "#fbd38d", "Poor air! Wear your N95 mask before stepping out."
 
     else:
-        # Full hazmat / heavy pollution, red tones, distressed
-        return """
-        <svg class="char-svg" width="110" height="140" viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
-          <!-- Body / hazmat suit -->
-          <ellipse cx="55" cy="115" rx="30" ry="20" fill="#6b1a1a"/>
-          <rect x="28" y="85" width="54" height="38" rx="12" fill="#8b2222"/>
-          <!-- Gloves -->
-          <ellipse cx="18" cy="115" rx="8" ry="6" fill="#a83232"/>
-          <ellipse cx="92" cy="115" rx="8" ry="6" fill="#a83232"/>
-          <!-- Neck cover -->
-          <rect x="46" y="70" width="18" height="18" rx="5" fill="#c0392b"/>
-          <!-- Head / helmet -->
-          <circle cx="55" cy="56" r="28" fill="#c0392b"/>
-          <!-- Helmet visor -->
-          <ellipse cx="55" cy="56" rx="20" ry="16" fill="#1a1a2e" opacity="0.85"/>
-          <!-- Eyes inside visor (red glow) -->
-          <ellipse cx="46" cy="53" rx="5" ry="4" fill="#ff6b6b" opacity="0.9"/>
-          <ellipse cx="64" cy="53" rx="5" ry="4" fill="#ff6b6b" opacity="0.9"/>
-          <circle cx="48" cy="51" r="2" fill="white" opacity="0.6"/>
-          <circle cx="66" cy="51" r="2" fill="white" opacity="0.6"/>
-          <!-- Helmet band -->
-          <path d="M27 44 Q55 28 83 44" stroke="#8b2222" stroke-width="4" fill="none"/>
-          <!-- Filter canister on mask -->
-          <rect x="46" y="68" width="18" height="8" rx="4" fill="#555"/>
-          <rect x="50" y="71" width="10" height="3" rx="2" fill="#888"/>
-          <!-- Arms raised (warning pose) -->
-          <line x1="28" y1="95" x2="8" y2="78" stroke="#8b2222" stroke-width="10" stroke-linecap="round"/>
-          <line x1="82" y1="95" x2="102" y2="78" stroke="#8b2222" stroke-width="10" stroke-linecap="round"/>
-          <!-- Legs -->
-          <line x1="44" y1="122" x2="36" y2="140" stroke="#6b1a1a" stroke-width="9" stroke-linecap="round"/>
-          <line x1="66" y1="122" x2="74" y2="140" stroke="#6b1a1a" stroke-width="9" stroke-linecap="round"/>
-          <!-- Heavy pollution clouds -->
-          <circle cx="10" cy="50" r="7" fill="#e53e3e" opacity="0.25"/>
-          <circle cx="100" cy="40" r="5" fill="#e53e3e" opacity="0.2"/>
-          <circle cx="15" cy="30" r="4" fill="#fc8181" opacity="0.2"/>
-          <circle cx="95" cy="65" r="6" fill="#e53e3e" opacity="0.2"/>
-          <!-- Warning X marks -->
-          <line x1="5"  y1="20" x2="15" y2="30" stroke="#fc8181" stroke-width="2" opacity="0.5"/>
-          <line x1="15" y1="20" x2="5"  y2="30" stroke="#fc8181" stroke-width="2" opacity="0.5"/>
-          <line x1="95" y1="20" x2="105" y2="30" stroke="#fc8181" stroke-width="2" opacity="0.5"/>
-          <line x1="105" y1="20" x2="95" y2="30" stroke="#fc8181" stroke-width="2" opacity="0.5"/>
-        </svg>
-        """, "#fc8181", "HAZARDOUS! Stay indoors. Do not go outside without full protection."
+        return """<svg class="char-svg" width="100" height="130" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+<rect x="24" y="80" width="52" height="36" rx="11" fill="#8b2222"/>
+<ellipse cx="50" cy="112" rx="28" ry="18" fill="#6b1a1a"/>
+<ellipse cx="15" cy="110" rx="7" ry="5" fill="#a83232"/>
+<ellipse cx="85" cy="110" rx="7" ry="5" fill="#a83232"/>
+<rect x="43" y="67" width="14" height="15" rx="4" fill="#c0392b"/>
+<circle cx="50" cy="52" r="26" fill="#c0392b"/>
+<ellipse cx="50" cy="52" rx="18" ry="14" fill="#1a1a2e" opacity="0.85"/>
+<ellipse cx="42" cy="49" rx="4.5" ry="3.5" fill="#ff6b6b" opacity="0.9"/>
+<ellipse cx="58" cy="49" rx="4.5" ry="3.5" fill="#ff6b6b" opacity="0.9"/>
+<circle cx="44" cy="47" r="2" fill="white" opacity="0.6"/>
+<circle cx="60" cy="47" r="2" fill="white" opacity="0.6"/>
+<path d="M24 40 Q50 25 76 40" stroke="#8b2222" stroke-width="4" fill="none"/>
+<rect x="42" y="64" width="16" height="7" rx="3" fill="#555"/>
+<rect x="46" y="67" width="8" height="2.5" rx="1.5" fill="#888"/>
+<line x1="24" y1="90" x2="6" y2="74" stroke="#8b2222" stroke-width="9" stroke-linecap="round"/>
+<line x1="76" y1="90" x2="94" y2="74" stroke="#8b2222" stroke-width="9" stroke-linecap="round"/>
+<line x1="40" y1="118" x2="33" y2="130" stroke="#6b1a1a" stroke-width="8" stroke-linecap="round"/>
+<line x1="60" y1="118" x2="67" y2="130" stroke="#6b1a1a" stroke-width="8" stroke-linecap="round"/>
+<circle cx="8" cy="46" r="6" fill="#e53e3e" opacity="0.2"/>
+<circle cx="92" cy="36" r="5" fill="#e53e3e" opacity="0.18"/>
+</svg>""", "#fc8181", "HAZARDOUS! Stay indoors. Do not go outside without full protection."
+
+
+def girl_svg(aqi):
+    """GIRL character - used for 48h forecast"""
+    if aqi <= 50:
+        return """<svg class="char-svg" width="100" height="130" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 82 Q50 76 76 82 L76 114 Q50 120 24 114 Z" fill="#e879a0"/>
+<ellipse cx="50" cy="112" rx="26" ry="14" fill="#c0537a"/>
+<rect x="44" y="68" width="12" height="16" rx="4" fill="#f4a261"/>
+<circle cx="50" cy="54" r="24" fill="#f4a261"/>
+<path d="M26 40 Q30 22 50 20 Q70 22 74 40 Q70 32 50 30 Q30 32 26 40 Z" fill="#8b1a4a"/>
+<path d="M26 40 Q24 48 28 52" fill="#8b1a4a"/>
+<path d="M74 40 Q76 48 72 52" fill="#8b1a4a"/>
+<path d="M50 20 Q68 18 76 30 Q80 38 78 50 Q72 42 68 38" fill="#8b1a4a"/>
+<circle cx="42" cy="50" r="3.5" fill="#1a1a1a"/>
+<circle cx="58" cy="50" r="3.5" fill="#1a1a1a"/>
+<circle cx="43.5" cy="48.5" r="1.5" fill="white"/>
+<circle cx="59.5" cy="48.5" r="1.5" fill="white"/>
+<path d="M41 62 Q50 71 59 62" stroke="#c0392b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<circle cx="37" cy="59" r="4" fill="rgba(255,150,100,0.3)"/>
+<circle cx="63" cy="59" r="4" fill="rgba(255,150,100,0.3)"/>
+<line x1="24" y1="90" x2="8" y2="74" stroke="#e879a0" stroke-width="7" stroke-linecap="round"/>
+<line x1="76" y1="90" x2="92" y2="74" stroke="#e879a0" stroke-width="7" stroke-linecap="round"/>
+<path d="M38 114 Q36 122 33 130" stroke="#c0537a" stroke-width="7" fill="none" stroke-linecap="round"/>
+<path d="M62 114 Q64 122 67 130" stroke="#c0537a" stroke-width="7" fill="none" stroke-linecap="round"/>
+<circle cx="13" cy="55" r="3" fill="#68d391" opacity="0.8"/>
+<circle cx="87" cy="46" r="2" fill="#68d391" opacity="0.6"/>
+</svg>""", "#68d391", "Air is clean! Safe to go outside freely."
+
+    elif aqi <= 100:
+        return """<svg class="char-svg" width="100" height="130" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 82 Q50 76 76 82 L76 114 Q50 120 24 114 Z" fill="#9b5fc0"/>
+<ellipse cx="50" cy="112" rx="26" ry="14" fill="#7b3fa0"/>
+<rect x="44" y="68" width="12" height="16" rx="4" fill="#f4a261"/>
+<circle cx="50" cy="54" r="24" fill="#f4a261"/>
+<path d="M26 40 Q30 22 50 20 Q70 22 74 40 Q70 32 50 30 Q30 32 26 40 Z" fill="#4a2070"/>
+<path d="M26 40 Q24 48 28 52" fill="#4a2070"/>
+<path d="M74 40 Q76 48 72 52" fill="#4a2070"/>
+<ellipse cx="42" cy="50" rx="3.5" ry="3" fill="#1a1a1a"/>
+<ellipse cx="58" cy="50" rx="3.5" ry="3" fill="#1a1a1a"/>
+<circle cx="43.5" cy="48.5" r="1.5" fill="white"/>
+<circle cx="59.5" cy="48.5" r="1.5" fill="white"/>
+<rect x="34" y="58" width="32" height="14" rx="7" fill="#c9b1ff" opacity="0.9"/>
+<line x1="34" y1="65" x2="27" y2="63" stroke="#c9b1ff" stroke-width="2"/>
+<line x1="66" y1="65" x2="73" y2="63" stroke="#c9b1ff" stroke-width="2"/>
+<line x1="24" y1="92" x2="10" y2="80" stroke="#9b5fc0" stroke-width="7" stroke-linecap="round"/>
+<line x1="76" y1="92" x2="90" y2="80" stroke="#9b5fc0" stroke-width="7" stroke-linecap="round"/>
+<path d="M38 114 Q36 122 33 130" stroke="#7b3fa0" stroke-width="7" fill="none" stroke-linecap="round"/>
+<path d="M62 114 Q64 122 67 130" stroke="#7b3fa0" stroke-width="7" fill="none" stroke-linecap="round"/>
+</svg>""", "#f6e05e", "Moderate air. Consider a light mask outside."
+
+    elif aqi <= 200:
+        return """<svg class="char-svg" width="100" height="130" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 82 Q50 76 76 82 L76 114 Q50 120 24 114 Z" fill="#b45309"/>
+<ellipse cx="50" cy="112" rx="26" ry="14" fill="#92400e"/>
+<rect x="44" y="68" width="12" height="16" rx="4" fill="#e8956d"/>
+<circle cx="50" cy="54" r="24" fill="#e8956d"/>
+<path d="M26 40 Q30 22 50 20 Q70 22 74 40 Q70 32 50 30 Q30 32 26 40 Z" fill="#1a1a2e"/>
+<path d="M26 40 Q24 48 28 52" fill="#1a1a2e"/>
+<path d="M74 40 Q76 48 72 52" fill="#1a1a2e"/>
+<ellipse cx="42" cy="49" rx="4" ry="3" fill="#1a1a1a"/>
+<ellipse cx="58" cy="49" rx="4" ry="3" fill="#1a1a1a"/>
+<circle cx="43.5" cy="47.5" r="1.5" fill="white"/>
+<circle cx="59.5" cy="47.5" r="1.5" fill="white"/>
+<path d="M39 41 Q42 38 46 40" stroke="#3d2b1f" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M54 40 Q58 38 61 41" stroke="#3d2b1f" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M32 58 Q50 74 68 58 L68 70 Q50 84 32 70 Z" fill="#ddd"/>
+<path d="M32 58 Q50 53 68 58" fill="#eee"/>
+<line x1="32" y1="61" x2="24" y2="56" stroke="#bbb" stroke-width="2" stroke-linecap="round"/>
+<line x1="68" y1="61" x2="76" y2="56" stroke="#bbb" stroke-width="2" stroke-linecap="round"/>
+<line x1="24" y1="92" x2="10" y2="104" stroke="#b45309" stroke-width="7" stroke-linecap="round"/>
+<line x1="76" y1="92" x2="90" y2="104" stroke="#b45309" stroke-width="7" stroke-linecap="round"/>
+<path d="M38 114 Q36 122 33 130" stroke="#92400e" stroke-width="7" fill="none" stroke-linecap="round"/>
+<path d="M62 114 Q64 122 67 130" stroke="#92400e" stroke-width="7" fill="none" stroke-linecap="round"/>
+<circle cx="10" cy="52" r="4" fill="#dd6b20" opacity="0.35"/>
+<circle cx="88" cy="64" r="3" fill="#dd6b20" opacity="0.25"/>
+</svg>""", "#fbd38d", "Poor air! Wear your N95 mask before stepping out."
+
+    else:
+        return """<svg class="char-svg" width="100" height="130" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+<path d="M22 80 Q50 74 78 80 L78 114 Q50 122 22 114 Z" fill="#8b2222"/>
+<ellipse cx="50" cy="114" rx="28" ry="16" fill="#6b1a1a"/>
+<ellipse cx="13" cy="110" rx="7" ry="5" fill="#a83232"/>
+<ellipse cx="87" cy="110" rx="7" ry="5" fill="#a83232"/>
+<rect x="43" y="67" width="14" height="15" rx="4" fill="#c0392b"/>
+<circle cx="50" cy="52" r="26" fill="#c0392b"/>
+<ellipse cx="50" cy="52" rx="18" ry="14" fill="#1a1a2e" opacity="0.85"/>
+<ellipse cx="42" cy="49" rx="4.5" ry="3.5" fill="#ff6b6b" opacity="0.9"/>
+<ellipse cx="58" cy="49" rx="4.5" ry="3.5" fill="#ff6b6b" opacity="0.9"/>
+<circle cx="44" cy="47" r="2" fill="white" opacity="0.6"/>
+<circle cx="60" cy="47" r="2" fill="white" opacity="0.6"/>
+<path d="M24 40 Q50 25 76 40" stroke="#8b2222" stroke-width="4" fill="none"/>
+<rect x="42" y="64" width="16" height="7" rx="3" fill="#555"/>
+<rect x="46" y="67" width="8" height="2.5" rx="1.5" fill="#888"/>
+<line x1="22" y1="90" x2="5" y2="74" stroke="#8b2222" stroke-width="9" stroke-linecap="round"/>
+<line x1="78" y1="90" x2="95" y2="74" stroke="#8b2222" stroke-width="9" stroke-linecap="round"/>
+<path d="M38 116 Q35 123 32 130" stroke="#6b1a1a" stroke-width="8" fill="none" stroke-linecap="round"/>
+<path d="M62 116 Q65 123 68 130" stroke="#6b1a1a" stroke-width="8" fill="none" stroke-linecap="round"/>
+<circle cx="8" cy="46" r="6" fill="#e53e3e" opacity="0.2"/>
+<circle cx="92" cy="36" r="5" fill="#e53e3e" opacity="0.18"/>
+</svg>""", "#fc8181", "HAZARDOUS! Stay indoors. Do not go outside without full protection."
 
 
 # ── Hero ──────────────────────────────────────────────────────────────────────
 now = datetime.now()
-st.markdown(f"""
-<div class="hero-banner">
-    <div class="hero-sub">Real-Time Health Protection</div>
-    <div class="hero-title">Mumbai AQI Guardian</div>
-    <div class="hero-time">{now.strftime('%d %B %Y')} &nbsp;|&nbsp; {now.strftime('%I:%M %p')} &nbsp;|&nbsp; 24 &amp; 48 Hour Forecast</div>
-</div>
-""", unsafe_allow_html=True)
-
+st.markdown(
+    f'<div class="hero-banner">'
+    f'<div class="hero-sub">Real-Time Health Protection</div>'
+    f'<div class="hero-title">Mumbai AQI Guardian</div>'
+    f'<div class="hero-time">{now.strftime("%d %B %Y")} &nbsp;|&nbsp; {now.strftime("%I:%M %p")} &nbsp;|&nbsp; 24 &amp; 48 Hour Forecast</div>'
+    f'</div>',
+    unsafe_allow_html=True
+)
 
 # ── Model ─────────────────────────────────────────────────────────────────────
 @st.cache_resource
@@ -403,24 +423,20 @@ except:
     model = None
     st.info("Running in demo mode (model file not found)")
 
-
 # ── Scale ─────────────────────────────────────────────────────────────────────
-st.markdown("""
-<div class="scale-wrap">
-    <div class="scale-title">Air Quality Index - Reference Scale</div>
-    <div class="scale-bar"></div>
-    <div class="scale-labels">
-        <span>0</span><span>50</span><span>100</span><span>200</span><span>300</span><span>400+</span>
-    </div>
-    <div class="scale-chips">
-        <span class="chip chip-green">0-50 Good</span>
-        <span class="chip chip-yellow">51-100 Moderate</span>
-        <span class="chip chip-orange">101-200 Poor</span>
-        <span class="chip chip-red">201+ Danger</span>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
+st.markdown(
+    '<div class="scale-wrap">'
+    '<div class="scale-title">Air Quality Index - Reference Scale</div>'
+    '<div class="scale-bar"></div>'
+    '<div class="scale-labels"><span>0</span><span>50</span><span>100</span><span>200</span><span>300</span><span>400+</span></div>'
+    '<div class="scale-chips">'
+    '<span class="chip chip-green">0-50 Good</span>'
+    '<span class="chip chip-yellow">51-100 Moderate</span>'
+    '<span class="chip chip-orange">101-200 Poor</span>'
+    '<span class="chip chip-red">201+ Danger</span>'
+    '</div></div>',
+    unsafe_allow_html=True
+)
 
 # ── Inputs ────────────────────────────────────────────────────────────────────
 st.markdown('<div class="section-label">Current Conditions - Mumbai</div>', unsafe_allow_html=True)
@@ -435,52 +451,40 @@ with col2:
     humidity    = st.slider("Humidity (%)", 20, 100, 65)
     wind_speed  = st.slider("Wind Speed (km/h)", 0.0, 30.0, 8.0, step=0.5)
 
-# Mini readouts
-st.markdown(f"""
-<div class="mini-grid">
-    <div class="mini-card">
-        <div class="mini-label">AQI Now</div>
-        <div class="mini-value">{current_aqi}<span class="mini-unit">AQI</span></div>
-    </div>
-    <div class="mini-card">
-        <div class="mini-label">PM2.5</div>
-        <div class="mini-value">{pm25:.1f}<span class="mini-unit">ug/m3</span></div>
-    </div>
-    <div class="mini-card">
-        <div class="mini-label">Temp</div>
-        <div class="mini-value">{temp:.1f}<span class="mini-unit">deg C</span></div>
-    </div>
-    <div class="mini-card">
-        <div class="mini-label">Humidity</div>
-        <div class="mini-value">{humidity}<span class="mini-unit">%</span></div>
-    </div>
-    <div class="mini-card">
-        <div class="mini-label">Wind</div>
-        <div class="mini-value">{wind_speed:.1f}<span class="mini-unit">km/h</span></div>
-    </div>
-    <div class="mini-card">
-        <div class="mini-label">Season</div>
-        <div class="mini-value" style="font-size:0.95rem">{season}</div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+# Mini readouts — built with string concat, no triple-quotes, no HTML comments
+mini_html = (
+    '<div class="mini-grid">'
+    '<div class="mini-card"><div class="mini-label">AQI Now</div>'
+    f'<div class="mini-value">{current_aqi}<span class="mini-unit">AQI</span></div></div>'
+    '<div class="mini-card"><div class="mini-label">PM2.5</div>'
+    f'<div class="mini-value">{pm25:.1f}<span class="mini-unit">ug/m3</span></div></div>'
+    '<div class="mini-card"><div class="mini-label">Temp</div>'
+    f'<div class="mini-value">{temp:.1f}<span class="mini-unit">degC</span></div></div>'
+    '<div class="mini-card"><div class="mini-label">Humidity</div>'
+    f'<div class="mini-value">{humidity}<span class="mini-unit">%</span></div></div>'
+    '<div class="mini-card"><div class="mini-label">Wind</div>'
+    f'<div class="mini-value">{wind_speed:.1f}<span class="mini-unit">km/h</span></div></div>'
+    '<div class="mini-card"><div class="mini-label">Season</div>'
+    f'<div class="mini-value" style="font-size:0.9rem">{season}</div></div>'
+    '</div>'
+)
+st.markdown(mini_html, unsafe_allow_html=True)
 
-# ── Live character based on current AQI ──────────────────────────────────────
-char_svg, char_color, char_tip = get_character_svg(current_aqi)
-r_now, c_now, _, _ = get_risk(current_aqi)
-st.markdown(f"""
-<div class="character-wrap">
-    {char_svg}
-    <div class="character-text-block">
-        <div class="character-label">Air Quality Status</div>
-        <div class="character-status" style="color:{char_color};">Current AQI: {current_aqi} &mdash; {r_now}</div>
-        <div class="character-tip">{char_tip}</div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+# ── Live character (BOY) based on current AQI ─────────────────────────────────
+b_svg, char_color, char_tip = boy_svg(current_aqi)
+r_now, _, _, _ = get_risk(current_aqi)
+st.markdown(
+    '<div class="character-wrap">'
+    + b_svg +
+    '<div class="character-text-block">'
+    '<div class="character-label">Air Quality Status</div>'
+    f'<div class="character-status" style="color:{char_color};">AQI: {current_aqi} - {r_now}</div>'
+    f'<div class="character-tip">{char_tip}</div>'
+    '</div></div>',
+    unsafe_allow_html=True
+)
 
-
-# ── Predict ───────────────────────────────────────────────────────────────────
+# ── Predict Button ────────────────────────────────────────────────────────────
 predict_clicked = st.button("Predict 24h and 48h AQI + Health Risk", type="primary", use_container_width=True)
 
 if predict_clicked:
@@ -509,51 +513,58 @@ if predict_clicked:
         r24, c24, d24, cls24 = get_risk(pred_24)
         r48, c48, d48, cls48 = get_risk(pred_48)
 
-        # Alert
+        # Alert banner
         if r24 in ["Very Poor", "Severe"] or r48 in ["Very Poor", "Severe"]:
-            st.markdown("""<div class="alert-banner alert-danger">HIGH ALERT - Dangerous air quality expected. Take immediate precautions.</div>""", unsafe_allow_html=True)
+            alert_cls, alert_msg = "alert-danger",  "HIGH ALERT - Dangerous air quality expected. Take immediate precautions."
         elif r24 == "Poor" or r48 == "Poor":
-            st.markdown("""<div class="alert-banner alert-warning">CAUTION - Elevated AQI forecast. Sensitive groups should stay indoors.</div>""", unsafe_allow_html=True)
+            alert_cls, alert_msg = "alert-warning", "CAUTION - Elevated AQI forecast. Sensitive groups should stay indoors."
         else:
-            st.markdown("""<div class="alert-banner alert-safe">CONDITIONS MANAGEABLE - Stay aware and monitor changes.</div>""", unsafe_allow_html=True)
+            alert_cls, alert_msg = "alert-safe",    "CONDITIONS MANAGEABLE - Stay aware and monitor changes."
+        st.markdown(f'<div class="alert-banner {alert_cls}">{alert_msg}</div>', unsafe_allow_html=True)
 
-        # Forecast cards with characters
+        # Forecast cards — BOY for 24h, GIRL for 48h
         st.markdown('<div class="section-label">Health Forecast</div>', unsafe_allow_html=True)
         c1, c2 = st.columns(2, gap="medium")
-        char24_svg, _, _ = get_character_svg(pred_24)
-        char48_svg, _, _ = get_character_svg(pred_48)
+
+        b24_svg, _, _ = boy_svg(pred_24)
+        g48_svg, _, _ = girl_svg(pred_48)
 
         with c1:
-            st.markdown(f"""
-            <div class="pred-card pred-card-24">
-                <div class="pred-hour">Next 24 Hours</div>
-                {char24_svg}
-                <div class="pred-number" style="color:{c24};">{pred_24:.0f}</div>
-                <div class="pred-status" style="color:{c24};"><span class="dot {d24}"></span>{r24}</div>
-                <div class="pred-badge">AQI Forecast</div>
-            </div>""", unsafe_allow_html=True)
+            st.markdown(
+                '<div class="pred-card pred-card-24">'
+                '<div class="pred-hour">Next 24 Hours</div>'
+                + b24_svg +
+                f'<div class="pred-number" style="color:{c24};">{pred_24:.0f}</div>'
+                f'<div class="pred-status" style="color:{c24};"><span class="dot {d24}"></span>{r24}</div>'
+                '<div class="pred-badge">AQI Forecast</div>'
+                '</div>',
+                unsafe_allow_html=True
+            )
         with c2:
-            st.markdown(f"""
-            <div class="pred-card pred-card-48">
-                <div class="pred-hour">Next 48 Hours</div>
-                {char48_svg}
-                <div class="pred-number" style="color:{c48};">{pred_48:.0f}</div>
-                <div class="pred-status" style="color:{c48};"><span class="dot {d48}"></span>{r48}</div>
-                <div class="pred-badge">AQI Forecast</div>
-            </div>""", unsafe_allow_html=True)
+            st.markdown(
+                '<div class="pred-card pred-card-48">'
+                '<div class="pred-hour">Next 48 Hours</div>'
+                + g48_svg +
+                f'<div class="pred-number" style="color:{c48};">{pred_48:.0f}</div>'
+                f'<div class="pred-status" style="color:{c48};"><span class="dot {d48}"></span>{r48}</div>'
+                '<div class="pred-badge">AQI Forecast</div>'
+                '</div>',
+                unsafe_allow_html=True
+            )
 
         # Health advice
         st.markdown('<div class="section-label">Personalised Health Advice</div>', unsafe_allow_html=True)
-        st.markdown(f"""
-        <div class="advice-card {cls24}">
-            <div class="advice-title" style="color:{c24};">24-Hour Outlook - {r24}</div>
-            <div class="advice-text">{get_health_advice(r24, '24 hours')}</div>
-        </div>
-        <div class="advice-card {cls48}">
-            <div class="advice-title" style="color:{c48};">48-Hour Outlook - {r48}</div>
-            <div class="advice-text">{get_health_advice(r48, '48 hours')}</div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="advice-card {cls24}">'
+            f'<div class="advice-title" style="color:{c24};">24-Hour Outlook - {r24}</div>'
+            f'<div class="advice-text">{get_health_advice(r24, "24 hours")}</div>'
+            '</div>'
+            f'<div class="advice-card {cls48}">'
+            f'<div class="advice-title" style="color:{c48};">48-Hour Outlook - {r48}</div>'
+            f'<div class="advice-text">{get_health_advice(r48, "48 hours")}</div>'
+            '</div>',
+            unsafe_allow_html=True
+        )
 
         # Trend chart
         st.markdown('<div class="section-label">7-Day AQI Trend - Mumbai</div>', unsafe_allow_html=True)
@@ -579,7 +590,6 @@ if predict_clicked:
         m2.metric("24h Forecast", f"{pred_24:.0f}", delta=f"{pred_24 - current_aqi:+.0f}")
         m3.metric("48h Forecast", f"{pred_48:.0f}", delta=f"{pred_48 - current_aqi:+.0f}")
         m4.metric("PM2.5",        f"{pm25:.1f} ug")
-
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
