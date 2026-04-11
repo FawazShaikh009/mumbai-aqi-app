@@ -5,17 +5,20 @@ import joblib
 
 st.set_page_config(page_title="Mumbai AQI Guardian", layout="wide", page_icon="🌬️")
 
-# Beautiful Styling
+# Styling
 st.markdown("""
     <style>
     .main {padding-top: 2rem;}
-    .big-title {font-size: 3.2rem; font-weight: bold; color: #1e3a8a; text-align: center; margin-bottom: 10px;}
-    .aqi-card {padding: 25px; border-radius: 20px; color: white; text-align: center; box-shadow: 0 6px 20px rgba(0,0,0,0.15);}
-    .healthy-box {background-color: #d4edda; padding: 20px; border-radius: 15px; border-left: 8px solid #28a745;}
+    .big-title {font-size: 3rem; font-weight: bold; color: #1e3a8a; text-align: center; 
+                background: linear-gradient(90deg, #667eea, #764ba2); 
+                color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;}
+    .aqi-card {padding: 25px; border-radius: 20px; color: white; text-align: center; 
+               box-shadow: 0 6px 20px rgba(0,0,0,0.15);}
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<p class="big-title">🌬️ Mumbai Air Quality Guardian</p>', unsafe_allow_html=True)
+# Top Title Box
+st.markdown('<div class="big-title">🌬️ Mumbai AQI Guardian</div>', unsafe_allow_html=True)
 st.markdown("**Protecting Your Health • 24 & 48 Hours AQI Forecast**")
 
 # Load Model
@@ -81,7 +84,7 @@ if st.button("🔮 Predict Future AQI & Health Impact", type="primary", use_cont
             pred_48 = current_aqi * season_factor * 1.08 + np.random.uniform(-30, 35)
 
         def get_risk_info(aqi):
-            if aqi <= 50: return "Good", "🟢", "Safe to breathe"
+            if aqi <= 50: return "Good", "🟢", "Safe"
             elif aqi <= 100: return "Moderate", "🟡", "Generally safe"
             elif aqi <= 200: return "Poor", "🟠", "Caution advised"
             elif aqi <= 300: return "Very Poor", "🔴", "High Risk"
@@ -90,7 +93,7 @@ if st.button("🔮 Predict Future AQI & Health Impact", type="primary", use_cont
         risk_24, emoji_24, status_24 = get_risk_info(pred_24)
         risk_48, emoji_48, status_48 = get_risk_info(pred_48)
 
-        # Beautiful Prediction Cards
+        # Prediction Cards
         st.markdown("### 📊 Your 24 & 48 Hour Health Forecast")
         c1, c2 = st.columns(2)
 
@@ -143,4 +146,6 @@ with st.sidebar:
     - Children & Elderly
     - People with Asthma
     """)
-    st.caption("Built for
+    st.caption("Built for Mumbai • Capstone Project")
+
+st.caption("Note: This app uses a light Random Forest model (7MB) for fast predictions.")
