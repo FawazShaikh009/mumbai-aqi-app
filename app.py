@@ -8,7 +8,7 @@ st.set_page_config(page_title="Mumbai AQI Predictor", layout="wide")
 st.title("🌬️ Mumbai Air Quality Predictor")
 st.markdown("**24 & 48 Hours AQI Forecast with Early Warnings**")
 
-# Load the model (now directly from GitHub)
+# Load model
 @st.cache_resource
 def load_model():
     model = joblib.load("mumbai_aqi_model_streamlit.pkl")
@@ -25,7 +25,7 @@ def get_risk_level(aqi):
     elif aqi <= 300: return "Very Poor"
     else:           return "Severe"
 
-# Input Section
+# ====================== MAIN APP ======================
 st.header("Enter Current Conditions")
 
 col1, col2 = st.columns(2)
@@ -40,33 +40,28 @@ with col2:
     wind_speed = st.slider("Wind Speed (km/h)", 0.0, 30.0, 8.0)
 
 if st.button("🔮 Predict 24h & 48h AQI", type="primary"):
-    with st.spinner("Predicting..."):
-        input_df = pd.DataFrame({
-            'US_AQI': [current_aqi],
-            'PM2_5_ugm3': [pm25],
-            'Temp_2m_C': [temp],
-            'Humidity_Percent': [humidity],
-            'Wind_Speed_10m_kmh': [wind_speed],
-            'US_AQI_lag24': [current_aqi - 8],
-            'PM2_5_ugm3_lag24': [pm25 - 5],
-        })
+    with st.spinner("Making prediction..."):
         
-        pred = model.predict(input_df)
-        pred_24 = pred[0][0]
-        pred_48 = pred[0][1]
+        # Create a DataFrame with ALL expected features (filled with reasonable defaults)
+        feature_names = model.feature_names_in_ if hasattr(model, 'feature_names_in_') else None
         
-        c1, c2 = st.columns(2)
-        with c1:
-            st.metric("**24 Hours Later**", f"{pred_24:.1f}", f"{pred_24 - current_aqi:+.1f}")
-            st.success(f"Risk: **{get_risk_level(pred_24)}**")
-        
-        with c2:
-            st.metric("**48 Hours Later**", f"{pred_48:.1f}", f"{pred_48 - current_aqi:+.1f}")
-            st.success(f"Risk: **{get_risk_level(pred_48)}**")
-        
-        if get_risk_level(pred_24) in ["Poor", "Very Poor", "Severe"]:
-            st.error(f"⚠️ 24h: {get_risk_level(pred_24)} air quality expected!")
-        if get_risk_level(pred_48) in ["Poor", "Very Poor", "Severe"]:
-            st.error(f"⚠️ 48h: {get_risk_level(pred_48)} air quality expected!")
-
-st.caption("Capstone Project • Random Forest • Mumbai AQI 24-48h Prediction")
+        if feature_names is not None:
+            input_data = pd.DataFrame(0, index=[0], columns=feature_names)
+            
+            # Fill the important features we have from user input
+            input_data['US_AQI'] = current_aqi
+            input_data['PM2_5_ugm3'] = pm25
+            input_data['Temp_2m_C'] = temp
+            input_data['Humidity_Percent'] = humidity
+            input_data['Wind_Speed_10m_kmh'] = wind_speed
+            
+            # Add some lag features with logical values
+            input_data['US_AQI_lag24'] = current_aqi * 0.95
+            input_data['PM2_5_ugm3_lag24'] = pm25 * 0.92
+            input_data['US_AQI_lag1'] = current_aqi
+            input_data['PM2_5_ugm3_lag1'] = pm25
+            
+        else:
+            # Fallback if feature names not available
+            input_data = pd.DataFrame({
+                'US
