@@ -2,18 +2,16 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-from datetime import datetime
 
 st.set_page_config(page_title="Mumbai AQI Guardian", layout="wide", page_icon="🌬️")
 
-# Beautiful Health-Themed Styling
+# Beautiful Styling
 st.markdown("""
     <style>
     .main {padding-top: 2rem;}
-    .big-title {font-size: 3rem; font-weight: bold; color: #1e3a8a; text-align: center;}
-    .aqi-card {padding: 25px; border-radius: 20px; color: white; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
+    .big-title {font-size: 3.2rem; font-weight: bold; color: #1e3a8a; text-align: center; margin-bottom: 10px;}
+    .aqi-card {padding: 25px; border-radius: 20px; color: white; text-align: center; box-shadow: 0 6px 20px rgba(0,0,0,0.15);}
     .healthy-box {background-color: #d4edda; padding: 20px; border-radius: 15px; border-left: 8px solid #28a745;}
-    .action-box {background-color: #e3f2fd; padding: 18px; border-radius: 12px;}
     </style>
 """, unsafe_allow_html=True)
 
@@ -29,20 +27,20 @@ model = load_model()
 
 st.success("✅ Model Ready | Protecting Mumbai's Health")
 
-# Healthy AQI Information
+# Healthy AQI Range
 st.markdown("### 🛡️ Healthy AQI Range for Normal Humans")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.metric("**Good**", "0 - 50", "Safe to breathe")
+    st.metric("**Good**", "0 - 50", "Safe")
 with col2:
     st.metric("**Moderate**", "51 - 100", "Acceptable")
 with col3:
-    st.metric("**Poor**", "101 - 200", "Caution advised")
+    st.metric("**Poor**", "101 - 200", "Caution")
 with col4:
     st.metric("**Very Poor**", "201+", "High Risk")
 
-st.info("💡 **Tip**: For a healthy person, try to keep AQI **below 100**. Above 150, children, elderly, and people with asthma should be extra careful.")
+st.info("💡 **For a healthy person**, try to keep AQI **below 100**. Above 150, extra precautions are recommended.")
 
 # Input Section
 st.header("📍 Current Conditions in Mumbai")
@@ -83,11 +81,11 @@ if st.button("🔮 Predict Future AQI & Health Impact", type="primary", use_cont
             pred_48 = current_aqi * season_factor * 1.08 + np.random.uniform(-30, 35)
 
         def get_risk_info(aqi):
-            if aqi <= 50: return "Good", "🟢", "Safe"
+            if aqi <= 50: return "Good", "🟢", "Safe to breathe"
             elif aqi <= 100: return "Moderate", "🟡", "Generally safe"
-            elif aqi <= 200: return "Poor", "🟠", "Caution"
+            elif aqi <= 200: return "Poor", "🟠", "Caution advised"
             elif aqi <= 300: return "Very Poor", "🔴", "High Risk"
-            else: return "Severe", "⚫", "Emergency"
+            else: return "Severe", "⚫", "Emergency conditions"
 
         risk_24, emoji_24, status_24 = get_risk_info(pred_24)
         risk_48, emoji_48, status_48 = get_risk_info(pred_48)
@@ -100,7 +98,7 @@ if st.button("🔮 Predict Future AQI & Health Impact", type="primary", use_cont
             st.markdown(f"""
             <div class="aqi-card" style="background: linear-gradient(135deg, #667eea, #764ba2);">
                 <h3>24 Hours Later</h3>
-                <h1 style="font-size: 3.5rem;">{pred_24:.1f}</h1>
+                <h1 style="font-size: 3.8rem; margin: 10px 0;">{pred_24:.1f}</h1>
                 <h2>{emoji_24} {risk_24}</h2>
                 <p>{status_24}</p>
             </div>
@@ -110,7 +108,7 @@ if st.button("🔮 Predict Future AQI & Health Impact", type="primary", use_cont
             st.markdown(f"""
             <div class="aqi-card" style="background: linear-gradient(135deg, #f0932b, #eb4d4b);">
                 <h3>48 Hours Later</h3>
-                <h1 style="font-size: 3.5rem;">{pred_48:.1f}</h1>
+                <h1 style="font-size: 3.8rem; margin: 10px 0;">{pred_48:.1f}</h1>
                 <h2>{emoji_48} {risk_48}</h2>
                 <p>{status_48}</p>
             </div>
@@ -123,20 +121,20 @@ if st.button("🔮 Predict Future AQI & Health Impact", type="primary", use_cont
         with col_a:
             st.subheader(f"Next 24 Hours ({risk_24})")
             if risk_24 in ["Poor", "Very Poor", "Severe"]:
-                st.error("Limit outdoor activities • Wear N95 mask • Keep windows closed • Use air purifier if possible")
+                st.error("• Limit outdoor activities\n• Wear N95 mask\n• Keep windows closed\n• Use air purifier if possible")
             else:
                 st.success("You can go outside normally. Stay hydrated!")
 
         with col_b:
             st.subheader(f"Next 48 Hours ({risk_48})")
             if risk_48 in ["Poor", "Very Poor", "Severe"]:
-                st.error("Avoid going out if possible • Monitor breathing • Stay hydrated • Avoid heavy exercise")
+                st.error("• Avoid going out if possible\n• Monitor breathing\n• Stay hydrated\n• Avoid heavy exercise")
             else:
                 st.success("Air quality expected to remain acceptable.")
 
 # Sidebar
 with st.sidebar:
-    st.image("https://img.icons8.com/fluency/96/000000/lungs.png")
+    st.image("https://img.icons8.com/fluency/96/000000/lungs.png", width=90)
     st.header("Health First")
     st.info("""
     High AQI can affect:
@@ -145,6 +143,4 @@ with st.sidebar:
     - Children & Elderly
     - People with Asthma
     """)
-    st.caption("Built for Mumbai • Capstone Project")
-
-st.caption("Note: This app uses a light Random Forest model (7MB) for fast predictions.")
+    st.caption("Built for
