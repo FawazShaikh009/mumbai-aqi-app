@@ -346,11 +346,11 @@ def make_gauge(aqi, label, color):
             'bgcolor': '#151d30',
             'borderwidth': 0,
             'steps': [
-                {'range': [0, 50],   'color': '#00e67615'},
-                {'range': [50, 100], 'color': '#ffee5815'},
-                {'range': [100, 200],'color': '#ff980015'},
-                {'range': [200, 300],'color': '#f4433615'},
-                {'range': [300, 400],'color': '#9c27b015'},
+                {'range': [0, 50],    'color': 'rgba(0, 230, 118, 0.08)'},
+                {'range': [50, 100],  'color': 'rgba(255, 238, 88, 0.08)'},
+                {'range': [100, 200], 'color': 'rgba(255, 152, 0, 0.08)'},
+                {'range': [200, 300], 'color': 'rgba(244, 67, 54, 0.08)'},
+                {'range': [300, 400], 'color': 'rgba(156, 39, 176, 0.08)'},
             ],
             'threshold': {
                 'line': {'color': color, 'width': 3},
@@ -367,7 +367,7 @@ def make_gauge(aqi, label, color):
         font={'family': 'DM Sans'}
     )
     return fig
-
+    
 # ── Load model ─────────────────────────────────────────────────────────────────
 @st.cache_resource
 def load_model():
